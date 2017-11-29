@@ -9,6 +9,27 @@ import (
 	"log"
 )
 
+// Following is the schema used to find the size of proto encoded data.
+// module: openconfig-network-instance
+//   +--rw network-instances
+//      +--rw network-instance* [name]
+//         +--rw name                       -> ../config/name
+//         +--rw mpls
+//         |  +--rw signaling-protocols
+//         |  |  +--rw rsvp-te
+//         |  |  |  +--rw sessions
+//         |  |  |  |  +--ro session* [local-index]
+//         |  |  |  |     +--ro local-index             -> ../state/local-index
+//         |  |  |  |     +--ro record-route-objects
+//         |  |  |  |     |  +--ro record-route-object* [index]
+//         |  |  |  |     |     +--ro index    -> ../state/index
+//         |  |  |  |     |     +--ro state
+//         |  |  |  |     |        +--ro index?            uint8
+//         |  |  |  |     |        +--ro address?          inet:ip-address
+//         |  |  |  |     |        +--ro reported-label?   oc-mplst:mpls-label
+//         |  |  |  |     |        +--ro reported-flags?   uint8
+//
+
 func main() {
 
 	state := &ytop_pb.NetworkInstancesNetworkInstanceListMplsTypeSignalingProtocolsTypeRsvpTeTypeSessionsTypeSessionListRecordRouteObjectsTypeRecordRouteObjectListStateType{
@@ -40,8 +61,8 @@ func main() {
 		log.Fatal("marshaling error: ", err)
 	}
 
-	fmt.Printf("ytop size : %d\n", len(ytopSData))
-	//fmt.Printf("%v\n", ytopData)
+	fmt.Printf("%-4d yang-to-proto PB size\n", len(ytopSData))
+	fmt.Printf("%v\n", ytopData)
 
 	dd := []string{
 		"__prefix__", "/network-instances/network-instance[instance-name='master']/mpls/signaling-protocols/rsvp-te/sessions/session[local-index='138996']/record-route-objects/record-route-object[index='1']/",
@@ -72,7 +93,7 @@ func main() {
 		log.Fatal("marshaling error: ", err)
 	}
 
-	fmt.Printf("Multi-level OC prefix size = %d\n", len(data))
+	fmt.Printf("%-4d multi-level-prefix KV PB size\n", len(data))
 
 	dd1 := []string{
 		"__prefix__", "/network-instances/network-instance[instance-name='master']",
@@ -101,7 +122,7 @@ func main() {
 		log.Fatal("marshaling error: ", err)
 	}
 
-	fmt.Printf("single-level prefix compression size = %d\n", len(data1))
+	fmt.Printf("%-4d single-level-prefix KV PB size\n", len(data1))
 
 	dd2 := []string{
 		"/network-instances/network-instance[instance-name='master']/mpls/signaling-protocols/rsvp-te/sessions/session[local-index='138996']/record-route-objects/record-route-object[index='1']/index", "1",
@@ -128,7 +149,7 @@ func main() {
 		log.Fatal("marshaling error: ", err)
 	}
 
-	fmt.Printf("no comparession size = %d\n", len(data2))
+	fmt.Printf("%-4d no-compression KV PB size\n", len(data2))
 
 	gnmiData := &gnmi.Notification{
 		Timestamp: 1510946604929,
@@ -215,7 +236,7 @@ func main() {
 		log.Fatal("marshaling error: ", err)
 	}
 
-	fmt.Printf("gnmi size = %d\n", len(data3))
-	//fmt.Printf("\n%v\n", gnmiData)
+	fmt.Printf("%-4d gnmi (multi-level-prefix) protobuf size\n", len(data3))
+	fmt.Printf("\n%v\n", gnmiData)
 
 }
