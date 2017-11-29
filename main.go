@@ -5,10 +5,44 @@ import (
 	"github.com/golang/protobuf/proto"
 	gnmi "github.com/nileshsimaria/proto-size/gnmi"
 	kv_pb "github.com/nileshsimaria/proto-size/kv"
+	ytop_pb "github.com/nileshsimaria/proto-size/ytop"
 	"log"
 )
 
 func main() {
+
+	state := &ytop_pb.NetworkInstancesNetworkInstanceListMplsTypeSignalingProtocolsTypeRsvpTeTypeSessionsTypeSessionListRecordRouteObjectsTypeRecordRouteObjectListStateType{
+		Index:         1,
+		Address:       "64.233.160.3",
+		ReportedLabel: "NO_LABEL",
+		ReportedFlags: 32,
+	}
+	rr := make([]*ytop_pb.NetworkInstancesNetworkInstanceListMplsTypeSignalingProtocolsTypeRsvpTeTypeSessionsTypeSessionListRecordRouteObjectsTypeRecordRouteObjectList, 1)
+	rr[0] = &ytop_pb.NetworkInstancesNetworkInstanceListMplsTypeSignalingProtocolsTypeRsvpTeTypeSessionsTypeSessionListRecordRouteObjectsTypeRecordRouteObjectList{Index: 1, State: state}
+	rro := &ytop_pb.NetworkInstancesNetworkInstanceListMplsTypeSignalingProtocolsTypeRsvpTeTypeSessionsTypeSessionListRecordRouteObjectsType{RecordRouteObject: rr}
+
+	session := make([]*ytop_pb.NetworkInstancesNetworkInstanceListMplsTypeSignalingProtocolsTypeRsvpTeTypeSessionsTypeSessionList, 1)
+	session[0] = &ytop_pb.NetworkInstancesNetworkInstanceListMplsTypeSignalingProtocolsTypeRsvpTeTypeSessionsTypeSessionList{LocalIndex: uint64(138996), RecordRouteObjects: rro}
+	sessions := &ytop_pb.NetworkInstancesNetworkInstanceListMplsTypeSignalingProtocolsTypeRsvpTeTypeSessionsType{Session: session}
+
+	rsvpte := &ytop_pb.NetworkInstancesNetworkInstanceListMplsTypeSignalingProtocolsTypeRsvpTeType{Sessions: sessions}
+	sp := &ytop_pb.NetworkInstancesNetworkInstanceListMplsTypeSignalingProtocolsType{RsvpTe: rsvpte}
+
+	mpls := &ytop_pb.NetworkInstancesNetworkInstanceListMplsType{SignalingProtocols: sp}
+	ni := make([]*ytop_pb.NetworkInstancesNetworkInstanceList, 1)
+	ni[0] = &ytop_pb.NetworkInstancesNetworkInstanceList{InstanceName: "master", Mpls: mpls}
+
+	ytopData := &ytop_pb.NetworkInstances{}
+	ytopData.NetworkInstance = ni
+
+	ytopSData, err := proto.Marshal(ytopData)
+	if err != nil {
+		log.Fatal("marshaling error: ", err)
+	}
+
+	fmt.Printf("ytop size : %d\n", len(ytopSData))
+	//fmt.Printf("%v\n", ytopData)
+
 	dd := []string{
 		"__prefix__", "/network-instances/network-instance[instance-name='master']/mpls/signaling-protocols/rsvp-te/sessions/session[local-index='138996']/record-route-objects/record-route-object[index='1']/",
 		"index", "1",
@@ -182,5 +216,6 @@ func main() {
 	}
 
 	fmt.Printf("gnmi size = %d\n", len(data3))
-	fmt.Printf("\n%v\n", gnmiData)
+	//fmt.Printf("\n%v\n", gnmiData)
+
 }
