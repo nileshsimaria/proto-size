@@ -1,0 +1,256 @@
+syntax = "proto3";
+
+message network_instances {
+   message network_instance_list {
+      string instance_name = 51;
+      mpls_type mpls = 151;
+      message mpls_type {
+         signaling_protocols_type signaling_protocols = 151;
+         message signaling_protocols_type {
+            rsvp_te_type rsvp_te = 151;
+            message rsvp_te_type {
+               sessions_type sessions = 151;
+               message sessions_type {
+                  message session_list {
+                     uint64 local_index = 51;
+                     record_route_objects_type record_route_objects = 151;
+                     message record_route_objects_type {
+                        message record_route_object_list {
+                           uint32 index = 51;
+                           state_type state = 151;
+                           message state_type {
+                              uint32 index = 51;
+                              string address = 52;
+                              string reported_label = 53;
+                              uint32 reported_flags = 54;
+                           }
+                        }
+                        repeated record_route_object_list record_route_object = 151;
+                     }
+                     state_type state = 153;
+                     message state_type {
+                        uint64 local_index = 51;
+                        string source_address = 52;
+                        string destination_address = 53;
+                        uint32 tunnel_id = 54;
+                        uint32 lsp_id = 55;
+                        string session_name = 56;
+                        string status = 57;
+                        string type = 59;
+                        string protection_requested = 58;
+                        string label_in = 60;
+                        string label_out = 61;
+                        sender_tspec_type sender_tspec = 151;
+                        message sender_tspec_type {
+                           string rate = 51;
+                           string size = 52;
+                           string peak_data_rate = 53;
+                        }
+                     }
+                     explicit_route_objects_type explicit_route_objects = 152;
+                     message explicit_route_objects_type {
+                        message explicit_route_object_list {
+                           uint32 index = 52;
+                           state_type state = 151;
+                           message state_type {
+                              uint32 index = 51;
+                              string address = 52;
+                              string hop_type = 53;
+                           }
+                        }
+                        repeated explicit_route_object_list explicit_route_object = 151;
+                     }
+                  }
+                  repeated session_list session = 151;
+               }
+               neighbors_type neighbors = 152;
+               message neighbors_type {
+                  message neighbor_list {
+                     string address = 51;
+                     state_type state = 151;
+                     message state_type {
+                        string address = 51;
+                        string detected_interface = 52;
+                        string neighbor_status = 53;
+                        bool refresh_reduction = 54;
+                     }
+                  }
+                  repeated neighbor_list neighbor = 151;
+               }
+               global_type global = 153;
+               message global_type {
+                  graceful_restart_type graceful_restart = 151;
+                  message graceful_restart_type {
+                     state_type state = 151;
+                     message state_type {
+                        bool enable = 51;
+                        uint32 restart_time = 52;
+                        uint32 recovery_time = 53;
+                     }
+                  }
+                  soft_preemption_type soft_preemption = 152;
+                  message soft_preemption_type {
+                     state_type state = 151;
+                     message state_type {
+                        bool enable = 51;
+                        uint32 soft_preemption_timeout = 52;
+                     }
+                  }
+                  hellos_type hellos = 153;
+                  message hellos_type {
+                     state_type state = 151;
+                     message state_type {
+                        uint32 hello_interval = 51;
+                        bool refresh_reduction = 52;
+                     }
+                  }
+                  state_type state = 154;
+                  message state_type {
+                     counters_type counters = 152;
+                     message counters_type {
+                        uint64 path_timeouts = 51;
+                        uint64 reservation_timeouts = 52;
+                        uint64 rate_limited_messages = 53;
+                        uint64 in_path_messages = 54;
+                        uint64 in_path_error_messages = 55;
+                        uint64 in_path_tear_messages = 56;
+                        uint64 in_reservation_messages = 57;
+                        uint64 in_reservation_error_messages = 58;
+                        uint64 in_reservation_tear_messages = 59;
+                        uint64 in_hello_messages = 60;
+                        uint64 in_srefresh_messages = 61;
+                        uint64 in_ack_messages = 62;
+                        uint64 out_path_messages = 63;
+                        uint64 out_path_error_messages = 64;
+                        uint64 out_path_tear_messages = 65;
+                        uint64 out_reservation_messages = 66;
+                        uint64 out_reservation_error_messages = 67;
+                        uint64 out_reservation_tear_messages = 68;
+                        uint64 out_hello_messages = 69;
+                        uint64 out_srefresh_messages = 70;
+                        uint64 out_ack_messages = 71;
+                     }
+                     error_counters_type error_counters = 151;
+                     message error_counters_type {
+                        uint64 bad_packet_length = 51;
+                        uint64 bad_packet_version = 52;
+                        uint64 authentication_fail = 53;
+                        uint64 bad_checksum = 54;
+                        uint64 bad_packet_format = 55;
+                        uint64 recv_pkt_disabled_intf = 56;
+                        uint64 state_timeout = 57;
+                        uint64 message_out_of_order = 58;
+                        uint64 unknown_ack = 59;
+                        uint64 unknown_nack = 60;
+                        uint64 received_nack = 61;
+                        uint64 send_failure = 62;
+                     }
+                  }
+               }
+               interface_attributes_type interface_attributes = 154;
+               message interface_attributes_type {
+                  message interface_list {
+                     string interface_id = 51;
+                     state_type state = 151;
+                     message state_type {
+                        string interface_id = 51;
+                        counters_type counters = 151;
+                        message counters_type {
+                           uint64 in_path_messages = 51;
+                           uint64 in_path_error_messages = 52;
+                           uint64 in_path_tear_messages = 53;
+                           uint64 in_reservation_messages = 54;
+                           uint64 in_reservation_error_messages = 55;
+                           uint64 in_reservation_tear_messages = 56;
+                           uint64 in_hello_messages = 57;
+                           uint64 in_srefresh_messages = 58;
+                           uint64 in_ack_messages = 59;
+                           uint64 out_path_messages = 60;
+                           uint64 out_path_error_messages = 61;
+                           uint64 out_path_tear_messages = 62;
+                           uint64 out_reservation_messages = 63;
+                           uint64 out_reservation_error_messages = 64;
+                           uint64 out_reservation_tear_messages = 65;
+                           uint64 out_hello_messages = 66;
+                           uint64 out_srefresh_messages = 67;
+                           uint64 out_ack_messages = 68;
+                        }
+                        error_counters_type error_counters = 152;
+                        message error_counters_type {
+                           uint64 bad_packet_length = 51;
+                           uint64 bad_packet_version = 52;
+                           uint64 authentication_fail = 53;
+                           uint64 bad_checksum = 54;
+                           uint64 bad_packet_format = 55;
+                           uint64 recv_pkt_disabled_intf = 56;
+                           uint64 state_timeout = 57;
+                           uint64 message_out_of_order = 58;
+                           uint64 unknown_ack = 59;
+                           uint64 unknown_nack = 60;
+                           uint64 received_nack = 61;
+                           uint64 send_failure = 62;
+                        }
+                     }
+                     interface_ref_type interface_ref = 152;
+                     message interface_ref_type {
+                        state_type state = 151;
+                        message state_type {
+                           string interface = 51;
+                           uint32 subinterface = 52;
+                        }
+                     }
+                     bandwidth_reservations_type bandwidth_reservations = 153;
+                     message bandwidth_reservations_type {
+                        message bandwidth_reservation_list {
+                           string priority = 51;
+                           state_type state = 151;
+                           message state_type {
+                              string priority = 51;
+                              uint64 available_bandwidth = 52;
+                              uint64 reserved_bandwidth = 53;
+                              uint64 active_reservations_count = 54;
+                              uint64 highwater_mark = 55;
+                              uint64 static_bandwidth = 61;
+                           }
+                        }
+                        repeated bandwidth_reservation_list bandwidth_reservation = 151;
+                     }
+                     hellos_type hellos = 154;
+                     message hellos_type {
+                        state_type state = 151;
+                        message state_type {
+                           uint32 hello_interval = 51;
+                           bool refresh_reduction = 52;
+                        }
+                     }
+                     authentication_type authentication = 155;
+                     message authentication_type {
+                        state_type state = 151;
+                        message state_type {
+                           bool enable = 51;
+                        }
+                     }
+                     subscription_type subscription = 156;
+                     message subscription_type {
+                        state_type state = 151;
+                        message state_type {
+                           uint32 subscription = 51;
+                        }
+                     }
+                     protection_type protection = 157;
+                     message protection_type {
+                        state_type state = 151;
+                        message state_type {
+                           string link_protection_style_requested = 51;
+                           uint32 bypass_optimize_interval = 52;
+                        }
+                     }
+                  }
+                  repeated interface_list interface = 151;
+               }
+            }
+         }
+      }
+   }
+   repeated network_instance_list network_instance = 151;
+}
